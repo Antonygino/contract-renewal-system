@@ -34,7 +34,7 @@ app.use(
     crossOriginResourcePolicy: { policy: 'cross-origin' },
   })
 );
-app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:3000'], credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
 
 // Rate limiting
@@ -75,6 +75,15 @@ app.use('/api/admin', adminRoutes);
 // Favicon handler
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
+// Root endpoint for platform health checks
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'RenewalTrack API Server is running',
+    health: '/api/health'
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({
@@ -97,7 +106,7 @@ app.use(errorHandler);
 startRenewalCron();
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
   console.log(`📡 API: http://localhost:${PORT}/api`);
   console.log(`💊 Health: http://localhost:${PORT}/api/health\n`);
