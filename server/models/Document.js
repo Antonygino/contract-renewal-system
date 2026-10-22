@@ -128,7 +128,6 @@ documentSchema.index({ department: 1, status: 1 });
 documentSchema.index({ user: 1, expiryDate: 1 });
 documentSchema.index({ user: 1, createdAt: -1 });
 documentSchema.index({ expiryDate: 1, status: 1 });
-documentSchema.index({ 'renewalRequest.status': 1 });
 
 // Auto-update status before saving (preserve manually set terminal/custom statuses like 'Cancelled')
 documentSchema.pre('save', function () {
